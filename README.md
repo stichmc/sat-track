@@ -1,1 +1,1 @@
-# sat-track
+# Sat-Track a satellite tracking software
