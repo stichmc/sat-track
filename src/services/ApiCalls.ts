@@ -19,23 +19,23 @@ const getSatellitePosition = async (id: number, count: number) => {
             // phi = latitude
             // theta = longitude
             const phi: number = response.data.positions[0].satlatitude > 0 ?
-                                90 - response.data.positions[0].satlatitude :
-                                -90 + response.data.positions[0].satlatitude
+                90 - response.data.positions[0].satlatitude :
+                -90 + response.data.positions[0].satlatitude
             const theta: number = response.data.positions[0].satlongitude
             const height: number = 6371 + 400 // Earth's radius + estimate
 
             const responseData: APIResponse = { phi, theta, height }
             return responseData
         } else {
-            const responseData: APIResponse = { phi: -1, theta: -1, height: -1}
+            const responseData: APIResponse = { phi: -1, theta: -1, height: -1 }
             return responseData;
         }
     } catch (error: any) {
         if (!error.response) {
-            const responseData: APIResponse = { phi: -1, theta: -1, height: -1}
+            const responseData: APIResponse = { phi: -1, theta: -1, height: -1 }
             return responseData;
         } else {
-            const responseData: APIResponse = { phi: -1, theta: -1, height: -1}
+            const responseData: APIResponse = { phi: -1, theta: -1, height: -1 }
             return responseData;
         }
     }
