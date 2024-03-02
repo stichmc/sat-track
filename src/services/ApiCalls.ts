@@ -2,25 +2,10 @@ import axios from 'axios'
 const API_URL = `https://corsproxy.io/?https://api.n2yo.com/rest/v1/satellite/`;
 const API_KEY = import.meta.env.VITE_API_KEY
 
-interface InfoObject {
-    satid: number;
-    satname: String;
-    transactionscount: number;
-}
-
-interface PositionObject {
-    satlatitude: number;
-    satlongitude: number;
-    azimuth: number;
-    elevation: number;
-    ra: number;
-    dec: number;
-    timestamp: number;
-}
-
 export interface APIResponse {
-    info: InfoObject;
-    positions: Array<PositionObject>;
+    phi: number;
+    theta: number;
+    height: number;
 }
 
 const getSatellitePosition = async (id: number, count: number) => {
@@ -31,15 +16,27 @@ const getSatellitePosition = async (id: number, count: number) => {
         const url = `${API_URL}/positions/${id}/${latitude}/${longitude}/${elevation}/${count}/?apiKey=${API_KEY}`
         const response = await axios.get(url);
         if (response.status === 200) {
-            return response.data
+            // phi = latitude
+            // theta = longitude
+            const phi: number = response.data.positions[0].satlatitude > 0 ?
+                                90 - response.data.positions[0].satlatitude :
+                                -90 + response.data.positions[0].satlatitude
+            const theta: number = response.data.positions[0].satlongitude
+            const height: number = 6371 + 400 // Earth's radius + estimate
+
+            const responseData: APIResponse = { phi, theta, height }
+            return responseData
         } else {
-            return false;
+            const responseData: APIResponse = { phi: -1, theta: -1, height: -1}
+            return responseData;
         }
     } catch (error: any) {
         if (!error.response) {
-            return false;
+            const responseData: APIResponse = { phi: -1, theta: -1, height: -1}
+            return responseData;
         } else {
-            return false;
+            const responseData: APIResponse = { phi: -1, theta: -1, height: -1}
+            return responseData;
         }
     }
 };
