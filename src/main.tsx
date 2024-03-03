@@ -10,6 +10,9 @@ import World from "./components/World.tsx";
 // Pages
 import Home from "./pages/Home.tsx";
 
+// API Data
+import MappingData from "./components/MappingData.tsx";
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
