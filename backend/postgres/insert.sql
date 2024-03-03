@@ -1,4 +1,4 @@
-INSERT INTO satellite (satID, satname, launchDate, longtitude, latitude, altitude, time) VALUES
+INSERT INTO satellite (satID, satname, launchDate, longitude, latitude, altitude, time) VALUES
  (25544, 'International Space Station', '1998-11-20', 0.0, 0.0, 0.0, 0),
  (20580, 'Hubble Space Telescope', '1990-04-24', 0.0, 0.0, 0.0, 0),
  (36516, 'SES 1', '2010-04-24', 0.0, 0.0, 0.0, 0),
