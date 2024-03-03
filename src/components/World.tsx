@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import * as THREE from "three";
-import Globe from "react-globe.gl";
+import Globe, { GlobeProps, GlobeMethods } from "react-globe.gl";
 import * as satellite from "satellite.js";
+import { getSatellitePosition } from "../services/ApiCalls";
 
 interface SatData {
-  satrec: any;
+  satrec: satellite.SatRec;
   name: string;
   lat?: number;
   lng?: number;
@@ -12,14 +13,14 @@ interface SatData {
 }
 
 const EARTH_RADIUS_KM = 6371; // km
-const SAT_SIZE = 300; // km
-const TIME_STEP = 3 * 1000; // per frame
+const SAT_SIZE = 200; // km
+const TIME_STEP = 2 * 1000; // per frame
 
 const World = () => {
-  const globeEl = useRef();
-  const [satData, setSatData] = useState();
-  const [globeRadius, setGlobeRadius] = useState();
-  const [time, setTime] = useState(new Date());
+  const globeEl = useRef<GlobeMethods>();
+  const [satData, setSatData] = useState<SatData[]>();
+  const [globeRadius, setGlobeRadius] = useState<number>();
+  const [time, setTime] = useState<Date>(new Date());
 
   useEffect(() => {
     // time ticker
@@ -40,7 +41,7 @@ const World = () => {
           .filter((d) => d)
           .map((tle) => tle.split("\n"))
           .map(([name, ...tle]) => ({
-            satrec: satellite.twoline2satrec(...tle),
+            satrec: satellite.twoline2satrec(...tle) as satellite.SatRec,
             name: name.trim().replace(/^0 /, ""),
           }))
           // exclude those that can't be propagated
@@ -78,25 +79,22 @@ const World = () => {
   }, [globeRadius]);
 
   useEffect(() => {
-    setGlobeRadius(globeEl.current.getGlobeRadius());
-    globeEl.current.pointOfView({ altitude: 3.5 });
+    setGlobeRadius(globeEl.current?.getGlobeRadius());
+    globeEl.current?.pointOfView({ altitude: 3.5 });
   }, []);
 
   return (
-    <div>
-      <Globe
-        ref={globeEl}
-        globeImageUrl="/earth-blue-marble.jpg"
-        objectsData={objectsData}
-        objectLabel="name"
-        objectLat="lat"
-        objectLng="lng"
-        objectAltitude="alt"
-        objectFacesSurface={false}
-        objectThreeObject={satObject}
-      />
-      <div id="time-log">{time.toString()}</div>
-    </div>
+    <Globe
+      ref={globeEl}
+      globeImageUrl="/earth-blue-marble.jpg"
+      objectsData={objectsData}
+      objectLabel="name"
+      objectLat="lat"
+      objectLng="lng"
+      objectAltitude="alt"
+      objectFacesSurface={false}
+      objectThreeObject={satObject}
+    />
   );
 };
 
