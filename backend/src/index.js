@@ -132,6 +132,33 @@ const cronJob = new cron.CronJob("*/5 * * * *", async () => {
 cronJob.start();
 
 // ****************************************
+//  Get Satellite Data
+// ****************************************
+
+//Get single satellite data
+app.get("/satellite/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    const response = await db.query("SELECT * FROM satellite WHERE satid = $1", [id]);
+    res.status(200).json(response.rows);
+  } catch (error) {
+    console.error("ERROR GETTING SATELLITE DATA:", error.message || error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+//Get table for satellite page
+app.get("/satellite", async (req, res) => {
+  try {
+    const response = await db.query("SELECT * FROM satellite");
+    res.status(200).json(response.rows);
+  } catch (error) {
+    console.error("ERROR GETTING SATELLITE DATA:", error.message || error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// ****************************************
 //  Broadcasting
 // ****************************************
 
