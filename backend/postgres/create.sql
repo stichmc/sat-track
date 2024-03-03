@@ -1,5 +1,3 @@
--- CREATE EXTENSION IF NOT EXISTS postgis;
-
 DROP TABLE IF EXISTS satellite;
 CREATE TABLE satellite (
     satID INT NOT NULL PRIMARY KEY,
@@ -7,5 +5,5 @@ CREATE TABLE satellite (
     launchDate DATE,
     coordinate POINT,
     altitude FLOAT,
-    time TIMESTAMP
+    time INT
 );

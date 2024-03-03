@@ -9,6 +9,8 @@ import World from "./components/World.tsx";
 
 // Pages
 import Home from "./pages/Home.tsx";
+import Satellites from "./pages/Satellites.tsx";
+// import { Satellite } from "lucide-react";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -18,6 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/" element={<Navigate to={`/home`} />} />
         <Route path="*" element={<Navigate to={`$/home`} />} />
         <Route path="/home" element={<Home></Home>}> </Route>
+        <Route path="/satellite" element={<Satellites></Satellites>}> </Route>
       </Routes>
       <World></World>
     </BrowserRouter>

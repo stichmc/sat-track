@@ -25,7 +25,7 @@ export default function Navbar() {
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <Link to={`${import.meta.env.BASE_URL}education`}>
+            <Link to={`${import.meta.env.BASE_URL}satellites`}>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 <p className="text-lg font-bold">Satellites</p>
               </NavigationMenuLink>
@@ -33,7 +33,7 @@ export default function Navbar() {
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <Link to={`${import.meta.env.BASE_URL}About`}>
+            <Link to={`${import.meta.env.BASE_URL}about`}>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 <p className="text-lg font-bold">About</p>
               </NavigationMenuLink>
