@@ -4,14 +4,16 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import pg from "pg";
 
+
 import axios from "axios";
 import cron from "cron";
+
+// import { satelliteRouter } from "./controllers/satellite.js";
+
 
 // Declarations
 const app = express();
 const port = process.env.PORT;
-const API_URL = `https://api.n2yo.com/rest/v1/satellite/`;
-const API_KEY = process.env.API_KEY;
 
 
 app.use(
@@ -38,7 +40,7 @@ try {
   process.exit();
 }
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 // ****************************************
 //  Update Satellite Data
@@ -62,8 +64,6 @@ const updateSatData = async (id) => {
       console.error("ERROR INSERTING DATA INTO DATABASE:", error.message || error);
     }
 };
-
-
 
 // const insertSatData = async (id) => {
 //   const satData = await getSatellitePosition(id, 1);
@@ -134,6 +134,8 @@ cronJob.start();
 // ****************************************
 //  Broadcasting
 // ****************************************
+
+// app.use('/api/satpos', satelliteRouter)
 
 if (port) {
   app.listen(port, () => {
