@@ -4,12 +4,12 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import pg from "pg";
 
-
 import axios from "axios";
 import cron from "cron";
 
-// import { satelliteRouter } from "./controllers/satellite.js";
+import { getSatellitePosition } from "./controllers/satellite.js";
 
+// import { satelliteRouter } from "./controllers/satellite.js";
 
 // Declarations
 const app = express();
@@ -123,71 +123,34 @@ const insertSatData = async (id) => {
 // ****************************************
 
 const updateSatData = async (id) => {
-    const satData = await getSatellitePosition(id, 1);
-    console.log(satData);
-    const { positions, height } = satData;
-    const longitude = positions[0].satlongitude;
-    const latitude = positions[0].satlatitude;
-    const time = positions[0].timestamp;
+  const satData = await getSatellitePosition(id, 1);
+  const { positions, height } = satData;
+  const longitude = positions[0].satlongitude;
+  const latitude = positions[0].satlatitude;
+  const time = positions[0].timestamp;
 
-    // const updateQuery = `UPDATE satellite SET (longtitude, latitude, altitude, time) VALUES ($1, $2, $3, $4) WHERE satID = $5`;
-    const updateQuery = `UPDATE satellite SET longitude=$1, latitude=$2, altitude=$3, time=$4 WHERE satID = $5`;
-    const values = [latitude, longitude, height, time, id];
+  // const updateQuery = `UPDATE satellite SET (longtitude, latitude, altitude, time) VALUES ($1, $2, $3, $4) WHERE satID = $5`;
+  const updateQuery = `UPDATE satellite SET longtitude=$1, latitude=$2, altitude=$3, time=$4 WHERE satID = $5`;
+  const values = [latitude, longitude, height, time, id];
 
-    try {
-      await db.query(updateQuery, values);
-    } catch (error) {
-      console.error("ERROR INSERTING DATA INTO DATABASE:", error.message || error);
-    }
+  try {
+    await db.query(updateQuery, values);
+  } catch (error) {
+    console.error("ERROR INSERTING DATA INTO DATABASE:", error.message || error);
+  }
 };
 
 
 
 //@PARAMs id = satellite ID (from API),
-const getSatellitePosition = async (id, count) => {
-  const latitude = 40.0074;
-  const longitude = -105.26633;
-  const elevation = 1655;
-
-  try {
-    const url = `${API_URL}positions/${id}/${latitude}/${longitude}/${elevation}/${count}/?apiKey=${API_KEY}`;
-
-    console.log(url);
-
-    const response = await axios.get(url);
-
-    if (response.status === 200) {
-      const name = response.data.info.satname;
-      const id = response.data.info.satid;
-      const positions = response.data.positions;
-      const height = 6371 + 400; // Earth's radius + estimate
-      const responseData = { name, id, positions, height };
-
-      return responseData;
-    } else {
-      const responseData = { name: "", id: -1, positions: [], height: -1 };
-      return responseData;
-    }
-  } catch (error) {
-    console.log(error);
-    if (!error.response) {
-      const responseData = { name: "", id: -1, positions: [], height: -1 };
-      return responseData;
-    } else {
-      const responseData = { name: "", id: -1, positions: [], height: -1 };
-      return responseData;
-    }
-  }
-};
 
 const cronJob = new cron.CronJob("*/5 * * * *", async () => {
   SatIDs = [25544, 20580, 36516, 33591, 29155, 28654, 25994, 27424, 38771, 37849, 36411, 40967, 27607];
 
-  console.log("CRON JOB STARTED");
   SatIDs.map((id) => {
     updateSatData(id);
-    });
   });
+});
 cronJob.start();
 
 // ****************************************
