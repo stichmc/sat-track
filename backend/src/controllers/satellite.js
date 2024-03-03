@@ -40,7 +40,6 @@ const getSatellitePosition = async (id, count) => {
 satelliteRouter.get("/:id", async (req, res) => {
   if (req.params.id) {
     res.json(await getSatellitePosition(req.params.id, 300));
-    console.log("We got skibidi rizz");
   } else {
     res.status(400).json({ error: "malformatted id" });
   }

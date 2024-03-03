@@ -44,7 +44,7 @@ const World = () => {
           }))
           // exclude those that can't be propagated
           .filter((d) => !!satellite.propagate(d.satrec, new Date()).position)
-          .slice(0, 50);
+          .slice(0, 20);
 
         setSatData(satData);
       });

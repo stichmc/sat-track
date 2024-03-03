@@ -53,26 +53,26 @@ app.post("/search", async (req, res) => {
   const id = req.body.id;
 
   const checkExistQuery = "SELECT EXISTS (SELECT 1 FROM satellite WHERE satID = $1) AS exists;";
-    let checkExistsSat = await db.query(checkExistQuery, [  id  ]);
-    if (checkExistsSat.rows[0].exists) { //Update existing satellite data
-      console.log("Satellite already exists in database, updating data...");
-    }
-    else {  // Insert new satellite data
-      if (insertSatData(id) < 0) {
-        res.status(500).send("Internal Server Error");
-        return;
-      }
-    }
-
-    try {
-      const response = await db.query("SELECT * FROM satellite WHERE satid = $1", [id]);
-      res.status(200).json(response.rows[0]);
-    } catch (error) {
-      console.error("ERROR GETTING SATELLITE DATA:", error.message || error);
+  let checkExistsSat = await db.query(checkExistQuery, [id]);
+  if (checkExistsSat.rows[0].exists) {
+    //Update existing satellite data
+    console.log("Satellite already exists in database, updating data...");
+  } else {
+    // Insert new satellite data
+    if (insertSatData(id) < 0) {
       res.status(500).send("Internal Server Error");
+      return;
     }
-});
+  }
 
+  try {
+    const response = await db.query("SELECT * FROM satellite WHERE satid = $1", [id]);
+    res.status(200).json(response.rows[0]);
+  } catch (error) {
+    console.error("ERROR GETTING SATELLITE DATA:", error.message || error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 //@PARAMs id = satellite ID (from API),
 const insertSatData = async (id) => {
@@ -86,20 +86,18 @@ const insertSatData = async (id) => {
   }
 
   const satData = await getSatellitePosition(id, 1);
-  
-  if(satData.name === '' || satData.id === -1){ 
+
+  if (satData.name === "" || satData.id === -1) {
     console.error("ERROR: INVALID SATELLITE ID");
     return -1;
   }
 
-  console.log(satData);
   const { name, positions, height } = satData;
   const longitude = positions[0].satlongitude;
   const latitude = positions[0].satlatitude;
   const time = positions[0].timestamp;
 
-  if(name === null || id === null)
-  { 
+  if (name === null || id === null) {
     console.error("ERROR: INVALID SATELLITE ID");
     return -1;
   }
@@ -116,7 +114,6 @@ const insertSatData = async (id) => {
     return -2;
   }
 };
-
 
 // ****************************************
 //  Update Satellite Data
@@ -139,8 +136,6 @@ const updateSatData = async (id) => {
     console.error("ERROR INSERTING DATA INTO DATABASE:", error.message || error);
   }
 };
-
-
 
 //@PARAMs id = satellite ID (from API),
 
@@ -165,7 +160,7 @@ app.get("/satellite/:id", async (req, res) => {
 
     // response.launchDate = response.launchDate.substring(0, 10);
     console.log("SINGLE:", response.rows[0].launchDate);
-    
+
     res.status(200).json(response.rows);
   } catch (error) {
     console.error("ERROR GETTING SATELLITE DATA:", error.message || error);
@@ -191,16 +186,15 @@ app.get("/satellite", async (req, res) => {
   }
 });
 
-
 //Udate on Startup
 const updateOnStartup = async () => {
   var initialized = false;
-  if(initialized === false){
+  if (initialized === false) {
     console.log("UPDATING ON STARTUP");
     SatIDs = [25544, 20580, 36516, 33591, 29155, 28654, 25994, 27424, 38771, 37849, 36411, 40967, 27607];
     SatIDs.map((id) => {
       updateSatData(id);
-      });
+    });
     initialized = true;
   }
 };

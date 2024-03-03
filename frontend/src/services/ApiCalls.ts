@@ -1,6 +1,6 @@
 import axios from "axios";
 const API_URL = "https://corsproxy.io/?https://api.n2yo.com/rest/v1/satellite/";
-const BACKEND_URL = "http://localhost:4000/satellite";
+const BACKEND_URL = "http://localhost:4000/";
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 interface Positions {
@@ -58,27 +58,32 @@ const getSatellitePosition = async (id: number, count: number) => {
 
 const getSatelliteData = async () => {
   try {
-    const url = BACKEND_URL;
+    const url = BACKEND_URL + "satellite";
     const response = await axios.get(url);
-    const satellites: Satellite[] = response.data;
-    console.log(response.data);
-    return satellites;
 
-    // if (response.status === 200) {
-    //   const name: string = response.data.info.satname;
-    //   const id: number = response.data.info.satid;
-    //   const positions: Array<Positions> = response.data.positions;
-    //   const height: number = 6371 + 400; // Earth's radius + estimate
-
-    //   const responseData: APIResponse = { name, id, positions, height };
-    //   return responseData;
-    // } else {
-    //   const responseData: APIResponse = { name: "", id: -1, positions: [], height: -1 };
-    //   return responseData;
-    // }
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      return [];
+    }
   } catch (error: any) {
     console.error(error);
   }
 };
 
-export { getSatellitePosition, getSatelliteData };
+const updateSatelliteData = async (id: Number) => {
+  try {
+    const url = BACKEND_URL + "search";
+    const response = await axios.post(url, { id });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      return [];
+    }
+  } catch (error: any) {
+    console.error(error);
+  }
+};
+
+export { getSatellitePosition, getSatelliteData, updateSatelliteData };
