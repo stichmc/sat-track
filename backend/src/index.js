@@ -5,12 +5,14 @@ import cors from "cors";
 import pg from "pg";
 
 import axios from "axios";
+import cron from "cron";
 
 // Declarations
 const app = express();
 const port = process.env.PORT;
 const API_URL = `https://api.n2yo.com/rest/v1/satellite/`;
 const API_KEY = process.env.API_KEY;
+
 
 app.use(
   cors({
@@ -38,11 +40,49 @@ try {
 
 app.use(bodyParser.json());
 
-const insertSatData = async () => {
-  const skibidiRizz = await getSatellitePosition(25544, 1);
+// ****************************************
+//  Update Satellite Data
+// ****************************************
 
-  console.log(skibidiRizz);
+const updateSatData = async (id) => {
+    const satData = await getSatellitePosition(id, 1);
+    console.log(satData);
+    const { positions, height } = satData;
+    const longitude = positions[0].satlongitude;
+    const latitude = positions[0].satlatitude;
+    const time = positions[0].timestamp;
+
+    // const updateQuery = `UPDATE satellite SET (longtitude, latitude, altitude, time) VALUES ($1, $2, $3, $4) WHERE satID = $5`;
+    const updateQuery = `UPDATE satellite SET longtitude=$1, latitude=$2, altitude=$3, time=$4 WHERE satID = $5`;
+    const values = [latitude, longitude, height, time, id];
+
+    try {
+      await db.query(updateQuery, values);
+    } catch (error) {
+      console.error("ERROR INSERTING DATA INTO DATABASE:", error.message || error);
+    }
 };
+
+
+
+// const insertSatData = async (id) => {
+//   const satData = await getSatellitePosition(id, 1);
+//   console.log(satData);
+//   const { name, positions, height } = satData;
+//   const longitude = positions[0].satlongitude;
+//   const latitude = positions[0].satlatitude;
+//   const time = positions[0].timestamp;
+
+//   const insertQuery = `INSERT INTO satellite (satName, satID, longtitude, latitude, altitude, time) VALUES ($1, $2, $3, $4, $5, $6)`;
+//   const values = [name, id, latitude, longitude, height, time];
+
+//   try {
+//     await db.query(insertQuery, values);
+//   } catch (error) {
+//     console.error("ERROR INSERTING DATA INTO DATABASE:", error.message || error);
+//   }
+
+// };
 
 //@PARAMs id = satellite ID (from API),  
 const getSatellitePosition = async (id, count) => {
@@ -50,7 +90,6 @@ const getSatellitePosition = async (id, count) => {
   const longitude = -105.26633;
   const elevation = 1655;
 
-  
   try {
     const url = `${API_URL}positions/${id}/${latitude}/${longitude}/${elevation}/${count}/?apiKey=${API_KEY}`;
 
@@ -82,9 +121,20 @@ const getSatellitePosition = async (id, count) => {
   }
 };
 
-insertSatData();
+const cronJob = new cron.CronJob("*/5 * * * *", async () => {
+  const SatIDs = [25544, 20580, 36516, 33591, 29155, 28654, 25994, 27424, 38771, 37849, 36411, 40967, 27607];
 
-// Broadcasting
+  console.log("CRON JOB STARTED");
+  SatIDs.map((id) => {
+    updateSatData(id);
+    });
+  });
+cronJob.start();
+
+// ****************************************
+//  Broadcasting
+// ****************************************
+
 if (port) {
   app.listen(port, () => {
     console.log(`SAT TRACK backend live on: http://localhost:${port}`);
