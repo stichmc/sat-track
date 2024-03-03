@@ -37,6 +37,7 @@ services:
       - POSTGRES_PASSWORD=1234
       - POSTGRES_DB=orbiter_db
       - FRONTEND_URL=http://localhost:3000
+      - API_KEY=6TQMSZ-GD5J56-SJA9LN-57T9
     command: npm run dev
     healthcheck:
       test: ["CMD", "curl", "-s", "http://localhost:4000/"]
