@@ -1,23 +1,16 @@
-// import { useState, useEffect } from "react";
+import World from "@/components/World";
 
 const Home = () => {
-
-  // const [fadeIn, setFadeIn] = useState(false);
-
-  // useEffect(() => {
-  //   setFadeIn(true);
-  // }, []);
-
   return (
-    // <div      className={`flex justify-center items-center h-full p-20 ${
-    //   fadeIn ? "opacity-100 duration-1000" : "opacity-0 duration-500"
-    // } transition-opacity mb-10`}>
-
-    <div>
-      This is body
+    <div className="grid grid-cols-2 grid-rows-2">
+      <div className="col-span-1 row-span-2">
+        <h1 className="text-4xl font-bold text-center text-white"></h1>
+      </div>
+      <div className="col-span-1 row-span-2">
+        <World></World>
+      </div>
     </div>
-    // </div>
-  )
+  );
 };
 
 export default Home;
