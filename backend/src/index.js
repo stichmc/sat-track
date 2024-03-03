@@ -130,7 +130,7 @@ const updateSatData = async (id) => {
   const time = positions[0].timestamp;
 
   // const updateQuery = `UPDATE satellite SET (longtitude, latitude, altitude, time) VALUES ($1, $2, $3, $4) WHERE satID = $5`;
-  const updateQuery = `UPDATE satellite SET longtitude=$1, latitude=$2, altitude=$3, time=$4 WHERE satID = $5`;
+  const updateQuery = `UPDATE satellite SET longitude=$1, latitude=$2, altitude=$3, time=$4 WHERE satID = $5`;
   const values = [latitude, longitude, height, time, id];
 
   try {
