@@ -15,14 +15,6 @@ import MappingData from "./components/MappingData.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Navigate to={`/home`} />} />
-        <Route path="*" element={<Navigate to={`$/home`} />} />
-        <Route path="/home" element={<Home></Home>}> </Route>
-      </Routes>
-      <World></World>
-    </BrowserRouter>
+    <MappingData />
   </React.StrictMode>
 );

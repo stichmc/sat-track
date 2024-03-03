@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
-import ApiCalls, { APIResponse } from '../services/ApiCalls'
+import { getSatellitePosition, APIResponse } from '../services/ApiCalls'
 
 function MappingData() {
   const [all, setAll] = useState<APIResponse>()
   useEffect(() => {
-    ApiCalls
-        .getSatellitePosition(25544, 1)
-        .then(response => {
+        getSatellitePosition(25544, 300)
+        .then((response) => {
             setAll(response)
         })
     }, [])
@@ -18,11 +17,11 @@ function MappingData() {
         <br/>
         ID: {all?.id}
         <br/>
-        Latitude Now: {all?.phi}
+        Latitude Now: {all?.positions[0].satlatitude}
         <br/>
-        Longitude Now: {all?.theta}
+        Longitude Now: {all?.positions[0].satlongitude}
         <br/>
-        Spherical Coordinates Now: ({all?.height}, {all?.theta}°, {all?.phi}°)
+        Spherical Coordinates Now: ({all?.height}, {all?.positions[0].satlongitude}°, {all?.positions[0].satlatitude}°)
       </div>
     </>
   );
