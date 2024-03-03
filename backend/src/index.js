@@ -65,6 +65,7 @@ const updateSatData = async (id) => {
     }
 };
 
+//@PARAMs id = satellite ID (from API),
 // const insertSatData = async (id) => {
 //   const satData = await getSatellitePosition(id, 1);
 //   console.log(satData);
@@ -84,7 +85,7 @@ const updateSatData = async (id) => {
 
 // };
 
-//@PARAMs id = satellite ID (from API),  
+//@PARAMs id = satellite ID (from API),
 const getSatellitePosition = async (id, count) => {
   const latitude = 40.0074;
   const longitude = -105.26633;
@@ -103,21 +104,21 @@ const getSatellitePosition = async (id, count) => {
       const positions = response.data.positions;
       const height = 6371 + 400; // Earth's radius + estimate
       const responseData = { name, id, positions, height };
-  
+
       return responseData;
     } else {
       const responseData = { name: "", id: -1, positions: [], height: -1 };
       return responseData;
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     if (!error.response) {
-      const responseData = { name: "", id: -1, positions: [], height: -1 }
+      const responseData = { name: "", id: -1, positions: [], height: -1 };
       return responseData;
-  } else {
-      const responseData = { name: "", id: -1, positions: [], height: -1 }
+    } else {
+      const responseData = { name: "", id: -1, positions: [], height: -1 };
       return responseData;
-  }
+    }
   }
 };
 
@@ -172,4 +173,3 @@ if (port) {
   console.log("SAT TRACK backend is not running without a PORT environment variable, shutting down.");
   process.exit();
 }
-

@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import * as THREE from "three";
-import Globe, { GlobeProps, GlobeMethods } from "react-globe.gl";
+import Globe, { GlobeMethods } from "react-globe.gl";
 import * as satellite from "satellite.js";
-import { getSatellitePosition } from "../services/ApiCalls";
 
 interface SatData {
   satrec: satellite.SatRec;
@@ -28,9 +27,7 @@ const World = () => {
       requestAnimationFrame(frameTicker);
       setTime((time) => new Date(+time + TIME_STEP));
     })();
-  }, []);
 
-  useEffect(() => {
     // load satellite data
     fetch("//unpkg.com/globe.gl/example/datasets/space-track-leo.txt")
       .then((r) => r.text())
@@ -41,12 +38,13 @@ const World = () => {
           .filter((d) => d)
           .map((tle) => tle.split("\n"))
           .map(([name, ...tle]) => ({
+            // @ts-ignore
             satrec: satellite.twoline2satrec(...tle) as satellite.SatRec,
             name: name.trim().replace(/^0 /, ""),
           }))
           // exclude those that can't be propagated
           .filter((d) => !!satellite.propagate(d.satrec, new Date()).position)
-          .slice(0, 10);
+          .slice(0, 50);
 
         setSatData(satData);
       });
@@ -60,8 +58,11 @@ const World = () => {
     return satData.map((d) => {
       const eci = satellite.propagate(d.satrec, time);
       if (eci.position) {
+        // @ts-ignore
         const gdPos = satellite.eciToGeodetic(eci.position, gmst);
+        // @ts-ignore
         const lat = satellite.radiansToDegrees(gdPos.latitude);
+        // @ts-ignore
         const lng = satellite.radiansToDegrees(gdPos.longitude);
         const alt = gdPos.height / EARTH_RADIUS_KM;
         return { ...d, lat, lng, alt };
@@ -84,17 +85,23 @@ const World = () => {
   }, []);
 
   return (
-    <Globe
-      ref={globeEl}
-      globeImageUrl="/earth-blue-marble.jpg"
-      objectsData={objectsData}
-      objectLabel="name"
-      objectLat="lat"
-      objectLng="lng"
-      objectAltitude="alt"
-      objectFacesSurface={false}
-      objectThreeObject={satObject}
-    />
+    <div>
+      <Globe
+        width={window.innerWidth / 2}
+        height={window.innerHeight}
+        ref={globeEl}
+        globeImageUrl="/earth-blue-marble.jpg"
+        objectsData={objectsData}
+        objectLabel="name"
+        objectLat="lat"
+        objectLng="lng"
+        objectAltitude="alt"
+        // @ts-ignore
+        objectFacesSurface={false}
+        objectThreeObject={satObject}
+        backgroundColor="black"
+      />
+    </div>
   );
 };
 
