@@ -20,42 +20,47 @@ const App = () => {
 
   return (
     <div className="grid grid-cols-2 grid-rows-2">
-      <div className="col-span-1 row-span-2 max-h-screen/2 overflow-y-auto">
-        <table className="text-white">
-          <thead>
-            <tr>
-              <th>Satellite ID</th>
-              <th>Satellite Name</th>
-              <th>Launch Date</th>
-              <th>Longitude</th>
-              <th>Latitude</th>
-              <th>Altitude</th>
-              <th>Time</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Satellites.map((satellite) => (
-              <tr key={satellite.satid}>
-                <td>{satellite.satid}</td>
-                <td>{satellite.satname}</td>
-                <td>{satellite.launchdate}</td>
-                <td>{satellite.longitude}</td>
-                <td>{satellite.latitude}</td>
-                <td>{satellite.altitude}</td>
-                <td>{satellite.time}</td>
+      <div className="col-span-1 row-span-2 flex flex-col justify-center items-center space-y-4">
+        <div className="text-white">hi</div>
+        <div className="max-h-96 overflow-y-auto bg-gray-900 rounded-2xl p-2">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Satellite ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Satellite Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Launch Date
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Longitude
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Latitude
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Altitude
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className=" divide-y divide-gray-200">
+              {Satellites.map((satellite) => (
+                <tr key={satellite.satid}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{satellite.satid}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{satellite.satname}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{satellite.launchdate}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{satellite.longitude}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{satellite.latitude}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{satellite.altitude}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div className="col-span-1 row-span-2">
-        <World></World>
-      </div>
-    </div>
-  );
-  return (
-    <div className="grid grid-cols-2 grid-rows-2">
-      <div className="col-span-1 row-span-2 max-h-2"></div>
       <div className="col-span-1 row-span-2">
         <World></World>
       </div>
