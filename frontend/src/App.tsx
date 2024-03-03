@@ -1,27 +1,26 @@
 import World from "@/components/World";
 
 import { Satellite, getSatelliteData } from "./services/ApiCalls";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const App = () => {
-  const Satellites: Satellite[] = [];
+  const [Satellites, setSatellites] = useState<Satellite[]>([]); // [Satellite, setSatellite
 
   const fetchData = async () => {
     const data = await getSatelliteData();
     if (data) {
-      data.forEach((satellite) => {
-        Satellites.push(satellite);
-      });
+      setSatellites(data);
     }
   };
 
   useEffect(() => {
     fetchData();
+    console.log();
   }, []);
 
   return (
     <div className="grid grid-cols-2 grid-rows-2">
-      <div className="col-span-1 row-span-2 max-h-2">
+      <div className="col-span-1 row-span-2 max-h-screen/2 overflow-y-auto">
         <table className="text-white">
           <thead>
             <tr>
