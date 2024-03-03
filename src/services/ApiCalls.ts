@@ -1,11 +1,11 @@
-import axios from 'axios'
+import axios from "axios";
 const API_URL = `https://corsproxy.io/?https://api.n2yo.com/rest/v1/satellite/`;
-const API_KEY = import.meta.env.VITE_API_KEY
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 export interface APIResponse {
-    phi: number;
-    theta: number;
-    height: number;
+  phi: number;
+  theta: number;
+  height: number;
 }
 
 const getSatellitePosition = async (id: number, count: number) => {
@@ -38,7 +38,7 @@ const getSatellitePosition = async (id: number, count: number) => {
             const responseData: APIResponse = { phi: -1, theta: -1, height: -1 }
             return responseData;
         }
-    }
+  }
 };
 
-export default { getSatellitePosition }
+export default getSatellitePosition;
