@@ -5,16 +5,20 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 // Components
 import Navbar from "./components/Navbar.tsx";
-import World from "./components/World.tsx";
+// import Footer from "./components/Footer.tsx";
 
 // Pages
 import Home from "./pages/Home.tsx";
 
-// API Data
-import MappingData from "./components/MappingData.tsx";
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <MappingData />
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Navigate to={`/home`} />} />
+        <Route path="*" element={<Navigate to={`$/home`} />} />
+        <Route path="/home" element={<Home></Home>}> </Route>
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
