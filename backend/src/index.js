@@ -4,9 +4,13 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import pg from "pg";
 
+import axios from "axios";
+
 // Declarations
 const app = express();
 const port = process.env.PORT;
+const API_URL = `https://corsproxy.io/?https://api.n2yo.com/rest/v1/satellite/`;
+const API_KEY = process.env.API_KEY;
 
 app.use(
   cors({
@@ -33,6 +37,43 @@ try {
 
 app.use(bodyParser.json());
 
+const insertSatData = async () => {
+  const response = await getSatellitePosition(25544, 1);
+
+  // console.log(response);
+};
+
+//@PARAMs id = satellite ID (from API),  
+const getSatellitePosition = async (id, count) => {
+  const latitude = 40.0074;
+  const longitude = -105.26633;
+  const elevation = 1655;
+
+  const url = `${API_URL}positions/${id}/${latitude}/${longitude}/${elevation}/${count}/?apiKey=${API_KEY}`;
+
+  console.log(url);
+
+  const response = await axios.get(url);
+
+  console.log(response.status);
+  // console.log(response.data);
+
+  if (response.status === 200) {
+    const name = response.data.info.satname;
+    const id = response.data.info.satid;
+    const positions = response.data.positions;
+    const height = 6371 + 400; // Earth's radius + estimate
+    const responseData = { name, id, positions, height };
+
+    return responseData;
+  } else {
+    const responseData = { name: "", id: -1, positions: [], height: -1 };
+    return responseData;
+  }
+};
+
+// insertSatData();
+
 // Broadcasting
 if (port) {
   app.listen(port, () => {
@@ -42,3 +83,4 @@ if (port) {
   console.log("SAT TRACK backend is not running without a PORT environment variable, shutting down.");
   process.exit();
 }
+
