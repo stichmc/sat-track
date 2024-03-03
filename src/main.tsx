@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 // Components
 import Navbar from "./components/Navbar.tsx";
-// import Footer from "./components/Footer.tsx";
+import Globe from "./components/Globe.tsx";
 
 // Pages
 import Home from "./pages/Home.tsx";
@@ -19,6 +19,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="*" element={<Navigate to={`$/home`} />} />
         <Route path="/home" element={<Home></Home>}> </Route>
       </Routes>
+      <Globe></Globe>
     </BrowserRouter>
   </React.StrictMode>
 );
