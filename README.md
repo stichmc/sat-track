@@ -1,3 +1,5 @@
+### The following project was part of the 2024 HACKCU Hackathon Event, we made it in just 24 hours!
+
 # Sat-Track
 ## Introduction
 
@@ -24,5 +26,5 @@ A Postgres SQL database was used to store satellite information, such as name, i
 An Express based Rest API was used to interface between the frontend and the database.
 API calls were made to n2yo.com to get updated satellite tracking information. 
 
-#Usage
+# Usage
 Run `docker compose up` in the root directory!
